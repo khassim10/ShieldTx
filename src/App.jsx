@@ -1,43 +1,41 @@
-// BrowserRouter : gère la navigation côté client (URL -> composants) en utilisant l’historique du navigateur.
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-
-// Navbar : barre de navigation affichée sur toutes les pages.
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
-
-// Pages : composants correspondant à chaque route.
 import Home from "./pages/Home";
 import Signalement from "./pages/Signalement";
 import Verification from "./pages/Verification";
 import Dashboard from "./pages/Dashboard";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import ShieldPrint from "./pages/ShieldPrint";
+import NotFound from "./pages/NotFound";
+import { useAuth } from "./context/AuthContext";
+
+function ProtectedRoute({ children }) {
+  const { user } = useAuth();
+  const location = useLocation();
+  return user
+    ? children
+    : <Navigate to="/login" state={{ from: location.pathname }} replace />;
+}
 
 function App() {
-  // Le composant App définit :
-  // - le contexte de routing (BrowserRouter)
-  // - le layout global (fond, texte) + Navbar
-  // - les routes (Routes/Route)
   return (
     <BrowserRouter>
-      {/* Layout global : min-h-screen + thème sombre */}
-      <div className="min-h-screen bg-gray-950 text-white">
-        {/* Navigation toujours visible */}
+      <div className="min-h-screen bg-slate-950 text-white">
         <Navbar />
-
-        {/* Routes : rend la première Route dont le path correspond */}
         <Routes>
-          {/* Route "root" */}
           <Route path="/" element={<Home />} />
-          {/* Page de signalement */}
-          <Route path="/signalement" element={<Signalement />} />
-          {/* Page de vérification */}
-          <Route path="/verification" element={<Verification />} />
-          {/* Page analytics */}
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/shieldprint" element={<ShieldPrint />} />
+          <Route path="/signalement" element={<ProtectedRoute><Signalement /></ProtectedRoute>} />
+          <Route path="/verification" element={<ProtectedRoute><Verification /></ProtectedRoute>} />
+          <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
     </BrowserRouter>
   );
 }
 
-// Export du composant principal pour qu’il soit utilisé dans main.jsx.
 export default App;
-

@@ -1,6 +1,4 @@
-// mockData.js — Données simulées ShieldTx
-// Numéros togolais fictifs avec niveaux de risque
- export const mockNumeros = [
+export const mockNumeros = [
   {
     numero: "90123456",
     statut: "DANGEREUX",
@@ -74,74 +72,33 @@
     message: "Aucun signalement pour ce numéro."
   }
 ];
-// Fonction de vérification mock (si l'API n'est pas disponible)
-export function verifierNumerMock(numero) {
-  const trouve = mockNumeros.find(n => n.numero === numero);
+
+// Un numéro inconnu n'est PAS fiable — il est simplement inconnu de notre base.
+export function verifierNumeroMock(numero) {
+  const trouve = mockNumeros.find((n) => n.numero === numero);
   if (trouve) return trouve;
   return {
     numero,
-    statut: "FIABLE",
-    score: 0,
+    statut: "INCONNU",
+    score: null,
     type_fraude: null,
     nb_signalements: 0,
-    message: "Aucun signalement pour ce numéro."
+    zone: "Inconnue",
+    message: "Ce numéro n'est pas dans notre base. Procédez avec prudence."
   };
 }
-// Transactions simulées pour le dashboard
+
 export const mockTransactions = [
-  {
-    id: 1,
-    montant: 750000,
-    type: "envoi",
-    statut: "suspecte",
-    score_risque: 85,
-    niveau_risque: "DANGEREUX",
-    created_at: "2026-06-06T23:15:00"
-  },
-  {
-    id: 2,
-    montant: 25000,
-    type: "reception",
-    statut: "normale",
-    score_risque: 10,
-    niveau_risque: "FIABLE",
-    created_at: "2026-06-06T14:30:00"
-  },
-  {
-    id: 3,
-    montant: 50000,
-    type: "envoi",
-    statut: "normale",
-    score_risque: 15,
-    niveau_risque: "FIABLE",
-    created_at: "2026-06-05T10:00:00"
-  },
-  {
-    id: 4,
-    montant: 200000,
-    type: "retrait",
-    statut: "suspecte",
-    score_risque: 45,
-    niveau_risque: "SUSPECT",
-    created_at: "2026-06-04T02:30:00"
-  },
-  {
-    id: 5,
-    montant: 15000,
-    type: "envoi",
-    statut: "normale",
-    score_risque: 5,
-    niveau_risque: "FIABLE",
-    created_at: "2026-06-03T09:00:00"
-  }
+  { id: 1, montant: 750000, type: "envoi",    statut: "suspecte", score_risque: 85, niveau_risque: "DANGEREUX", created_at: "2026-06-06T23:15:00" },
+  { id: 2, montant: 25000,  type: "reception",statut: "normale",  score_risque: 10, niveau_risque: "FIABLE",    created_at: "2026-06-06T14:30:00" },
+  { id: 3, montant: 50000,  type: "envoi",    statut: "normale",  score_risque: 15, niveau_risque: "FIABLE",    created_at: "2026-06-05T10:00:00" },
+  { id: 4, montant: 200000, type: "retrait",  statut: "suspecte", score_risque: 45, niveau_risque: "SUSPECT",   created_at: "2026-06-04T02:30:00" },
+  { id: 5, montant: 15000,  type: "envoi",    statut: "normale",  score_risque: 5,  niveau_risque: "FIABLE",    created_at: "2026-06-03T09:00:00" },
 ];
-// Stats simulées pour le dashboard
+
 export const mockStats = {
   total: 5,
   suspectes: 2,
   bloquees: 0,
-  montant_total: 1040000
+  montant_total: 1040000,
 };
-
-
-
